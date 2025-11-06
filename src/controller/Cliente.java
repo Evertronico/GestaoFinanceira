@@ -25,7 +25,7 @@ public class Cliente {
         this.numeroTelefoneFixo = numeroTelefoneFixo;
     }
 
-    // Getters e Setters (Necessários para manipulação dos dados)
+    // Getters e Setters
 
     public int getClienteId() {
         return clienteId;

@@ -74,7 +74,7 @@ public class ClienteModel {
 
             // percorre todas as linhas dentro do ResultSet
             while (rs.next()) {
-                // cria um objeto da classe Cliente (igual a como se faz no ObjetivoModel)
+                // cria um objeto da classe Cliente
                 Cliente c = new Cliente(
                     rs.getInt("cliente_id"),
                     rs.getString("nome"),
