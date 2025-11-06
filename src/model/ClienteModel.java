@@ -22,8 +22,8 @@ public class ClienteModel {
             c.conecte();
 
             Statement st = c.conexao.createStatement();
-            String sql = "select * from cliente order by nome";
-
+            String sql = "select * from cliente,telfone order by nome";
+           
             ResultSet rs = st.executeQuery(sql);
             // percorre todos os resultados (linhas) retornados pela query (sql)
             while (rs.next()) {
