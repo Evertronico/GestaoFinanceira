@@ -1,4 +1,3 @@
-
 package view;
 
 import controller.Cliente;
@@ -64,9 +63,9 @@ public class JFCliente extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         txtSenha = new javax.swing.JPasswordField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtCelular = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtFixo = new javax.swing.JTextField();
 
         jTextField2.setText("jTextField2");
 
@@ -218,9 +217,9 @@ public class JFCliente extends javax.swing.JFrame {
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtFixo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnGravar)
@@ -262,8 +261,8 @@ public class JFCliente extends javax.swing.JFrame {
                             .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtFixo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnGravar)
@@ -324,6 +323,12 @@ public class JFCliente extends javax.swing.JFrame {
         
         txtEmail.setText(c.getEmail() );
         txtSenha.setText(c.getSenha() );
+        txtCelular.setText(c.getCelular());
+        txtFixo.setText(c.getFixo());
+        
+        //entendimento sobre essa parte.
+        JOptionPane.showMessageDialog(null,c.getCelular());
+        JOptionPane.showMessageDialog(null,c.getFixo());
         
         //habilita o botão excluir.
         controlarBotoes();
@@ -352,6 +357,8 @@ public class JFCliente extends javax.swing.JFrame {
         
             String email = txtEmail.getText();
             String senha = txtSenha.getText();
+            String celular = txtCelular.getText();
+            String fixo = txtFixo.getText();
             
 
             // objeto da classe Objetivo
@@ -363,8 +370,13 @@ public class JFCliente extends javax.swing.JFrame {
             cpf,
             dataNascimento,
             email,
-            senha
+            senha,
+            celular,
+            fixo
             );
+            
+            JOptionPane.showMessageDialog(null, celular);
+            JOptionPane.showMessageDialog(null, fixo);
 
             ClienteModel model = new ClienteModel();
             String msg = model.grave(c);
@@ -446,13 +458,13 @@ public class JFCliente extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTable tblCliente;
+    private javax.swing.JTextField txtCelular;
     private javax.swing.JFormattedTextField txtCpf;
     private javax.swing.JFormattedTextField txtDataNascimento;
     private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtFixo;
     private javax.swing.JTextField txtNome;
     private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
@@ -479,7 +491,7 @@ public class JFCliente extends javax.swing.JFrame {
         for (Cliente C : liste) {
             // adiciona uma nova linha na tabela
             table.addRow(new Object[]{
-                C.getNome(), C.getCpf(), C.getDataNascimento(),C.getEmail()
+                C.getNome(), C.getCpf(), C.getEmail(), C.getCelular()
             });
         }        
     }
@@ -491,7 +503,7 @@ public class JFCliente extends javax.swing.JFrame {
         txtDataNascimento.setText("");
         txtEmail.setText("");
         txtSenha.setText("");
+        txtCelular.setText("");
+        txtFixo.setText("");
     }
-
-
 }
