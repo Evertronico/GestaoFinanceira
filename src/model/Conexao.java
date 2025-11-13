@@ -19,7 +19,7 @@ public class Conexao {
         String senha = "";
 
         // registra o driver de conexão na aplicação
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.jdbc.Driver");;
 
         // efetua uma conexão com o banco de dados e a atribui à variável global conexao
         this.conexao = DriverManager.getConnection(url, usuario, senha);
