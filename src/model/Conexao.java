@@ -16,7 +16,7 @@ public class Conexao {
 
         // define usuário e senha de comunicação com o banco de dados
         String usuario = "root";
-        String senha = "root";
+        String senha = "";
 
         // registra o driver de conexão na aplicação
         Class.forName("com.mysql.jdbc.Driver");
