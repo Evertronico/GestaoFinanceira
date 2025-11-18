@@ -10,6 +10,7 @@ import model.ClienteModel;
 
 /**
  *
+ * 
  * @author if739
  */
 public class JFCliente extends javax.swing.JFrame {
