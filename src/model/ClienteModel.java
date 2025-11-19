@@ -21,19 +21,31 @@ public class ClienteModel {
             c.conecte();
 
             Statement st = c.conexao.createStatement();
-            String sql = "select * from cliente order by nome";
-
+            // case e group by
+            String sql = """
+                SELECT 
+                    c.*, 
+                    MAX(CASE WHEN t.tipo = 'm' THEN t.numero END) AS celular,
+                    MAX(CASE WHEN t.tipo = 'f' THEN t.numero END) AS fixo
+                FROM cliente AS c
+                LEFT JOIN telefone AS t ON t.cliente_id = c.cliente_id
+                GROUP BY c.cliente_id
+                ORDER BY c.nome;
+            """;
+           
             ResultSet rs = st.executeQuery(sql);
             // percorre todos os resultados (linhas) retornados pela query (sql)
             while (rs.next()) {
                 // cria um objeto da classe objetivo
                 Cliente C = new Cliente(
-                    rs.getInt("cliente_id"),
-                    rs.getString("nome"),
-                    rs.getString("cpf"),
-                    rs.getDate("data_nascimento"),
-                    rs.getString("email"),
-                    rs.getString("senha")
+                    rs.getInt       ("cliente_id"),
+                    rs.getString    ("nome"),
+                    rs.getString    ("cpf"),
+                    rs.getDate      ("data_nascimento"),
+                    rs.getString    ("email"),
+                    rs.getString    ("senha"),
+                    rs.getString    ("celular"),
+                    rs.getString    ("fixo")
                 );
                 lista.add(C);
             }
@@ -50,16 +62,18 @@ public class ClienteModel {
             Conexao C = new Conexao();
             C.conecte();
 
-            String sql = "call p_salve_cliente(?, ?, ?, ?, ?, ?)";
+            String sql = "call p_salve_cliente(?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement st = C.conexao.prepareStatement(sql);
 
             // substitui todas as ? por valores dos atributos do objeto de Objetivo
-            st.setInt   (1, c.getClinteId());
+            st.setInt   (1, c.getClienteId());
             st.setString(2, c.getNome());
             st.setString(3, c.getCpf());
             st.setDate  (4, c.getDataNascimento());
             st.setString(5, c.getEmail());
             st.setString(6, c.getSenha());
+            st.setString(7, c.getCelular());
+            st.setString(8, c.getFixo());
 
             // executa a procedure
             st.execute();
@@ -99,9 +113,7 @@ public class ClienteModel {
             //atribui  amensagem a variavel declarada
             msg = rs.getString(2);
             st.close();
-            
-            
-            
+             
         } catch (SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
@@ -117,8 +129,18 @@ public class ClienteModel {
             Conexao c = new Conexao();
             c.conecte();
 
-            // query que será executada
-            String sql = "select * from cliente where nome like ? order by nome";
+            // query que será executada com CASE
+            String sql = """
+                SELECT 
+                    c.*, 
+                    MAX(CASE WHEN t.tipo = 'Celular' THEN t.numero END) AS celular,
+                    MAX(CASE WHEN t.tipo = 'Fixo' THEN t.numero END) AS fixo
+                FROM cliente AS c
+                LEFT JOIN telefone AS t ON t.cliente_id = c.cliente_id
+                WHERE c.nome LIKE ?
+                GROUP BY c.cliente_id
+                ORDER BY c.nome;
+            """;
 
             // prepara a query para receber o termo de busca na ?
             PreparedStatement st = c.conexao.prepareStatement(sql);
@@ -132,12 +154,14 @@ public class ClienteModel {
             while (rs.next()) {
                 // cria objeto da classe objetivo
                 Cliente C = new Cliente(
-                    rs.getInt("cliente_id"),
-                    rs.getString("nome"),
-                    rs.getString("cpf"),
-                    rs.getDate("data_nascimento"),
-                    rs.getString("email"),
-                    rs.getString("senha")
+                    rs.getInt       ("cliente_id"),
+                    rs.getString    ("nome"),
+                    rs.getString    ("cpf"),
+                    rs.getDate      ("data_nascimento"),
+                    rs.getString    ("email"),
+                    rs.getString    ("senha"),
+                    rs.getString("celular"),
+                    rs.getString("fixo")
                 );
                 // adiciona o objeto na coleção
                 clientes.add(C);

@@ -24,7 +24,5 @@ public class FormaPagamento {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    
+    }    
 }

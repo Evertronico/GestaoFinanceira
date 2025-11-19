@@ -6,32 +6,36 @@ import java.sql.Date;
 
 public class Cliente {
     
-    private int clinteId;
+    private int clienteId;
     private String nome;
     private String cpf;
     private java.sql.Date dataNascimento;
     private String email;
     private String senha;
+    private String celular;
+    private String fixo;
 
-    public Cliente(int clinteId, String nome, String cpf, Date dataNascimento, String email, String senha) {
-        this.clinteId = clinteId;
+    public Cliente(int clienteId, String nome, String cpf, Date dataNascimento, String email, String senha, String celular, String fixo) {
+        this.clienteId = clienteId;
         this.nome = nome;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
         this.email = email;
         this.senha = senha;
+        this.celular = celular;
+        this.fixo = fixo;
     }
 
     public Cliente(int aInt, String string, BigDecimal bigDecimal, Date date, BigDecimal bigDecimal0, BigDecimal bigDecimal1, int aInt0, int aInt1) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public int getClinteId() {
-        return clinteId;
+    public int getClienteId() {
+        return clienteId;
     }
 
-    public void setClinteId(int clinteId) {
-        this.clinteId = clinteId;
+    public void setClienteId(int clinteId) {
+        this.clienteId = clinteId;
     }
 
     public String getNome() {
@@ -72,5 +76,27 @@ public class Cliente {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+
+    public String getFixo() {
+        return fixo;
+    }
+
+    public void setFixo(String fixo) {
+        this.fixo = fixo;
+    }
+    
+    //sobreescrever o método.
+    @Override
+    public String toString() {
+        return nome;
     }
 }
