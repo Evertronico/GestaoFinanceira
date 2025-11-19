@@ -88,5 +88,11 @@ public class Objetivo {
     public void setCotas(int cotas) {
         this.cotas = cotas;
     }
-
+    
+    
+    //sobreescrever o método.
+    @Override
+    public String toString() {
+        return nome; // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
 }

@@ -67,7 +67,7 @@ public class ClienteModel {
             PreparedStatement st = C.conexao.prepareStatement(sql);
 
             // substitui todas as ? por valores dos atributos do objeto de Objetivo
-            st.setInt   (1, c.getClinteId());
+            st.setInt   (1, c.getClienteId());
             st.setString(2, c.getNome());
             st.setString(3, c.getCpf());
             st.setDate  (4, c.getDataNascimento());
