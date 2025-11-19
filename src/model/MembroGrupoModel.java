@@ -9,50 +9,6 @@ import javax.swing.JOptionPane;
 
 public class MembroGrupoModel {
 
-    public String grave(MembroGrupo m) {
-        String msg = "";
-        try {
-            Conexao c = new Conexao();
-            c.conecte();
-            String sql = "call p_salve_membro_grupo(?, ?, ?, ?)";
-            PreparedStatement st = c.conexao.prepareStatement(sql);
-            
-            st.setInt(1, m.getMembroGrupoId());
-            st.setInt(2, m.getCliente().getClienteId());
-            st.setInt(3, m.getObjetivo().getObjetivoId());
-            st.setInt(4, m.getGestor());
-            
-            st.executeUpdate();
-            ResultSet rs = st.getResultSet();
-            rs.next();
-            msg = rs.getString(2);
-            st.close();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-        return msg;
-    }
-
-    public String remova(int id) {
-        String msg = "";
-        try {
-            Conexao c = new Conexao();
-            c.conecte();
-            String sql = "call p_delete_membro_grupo(?)";
-            PreparedStatement st = c.conexao.prepareStatement(sql);
-            st.setInt(1, id);
-            st.executeUpdate();
-            ResultSet rs = st.getResultSet();
-            rs.next();
-            msg = rs.getString(2);
-            st.close();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-        return msg;
-    }
-
-    // Método genérico para buscar com JOINs
     private ArrayList<MembroGrupo> executarBusca(String sql, Integer filtroId) {
         ArrayList<MembroGrupo> lista = new ArrayList<>();
         try {
@@ -68,14 +24,20 @@ public class MembroGrupoModel {
             while (rs.next()) {
                 // Reconstrói o objeto Cliente
                 Cliente cli = new Cliente(
-                    rs.getInt("cliente_id"), rs.getString("nome_cliente"), rs.getString("cpf"), 
-                    rs.getDate("data_nascimento"), rs.getString("email"), "", "", "" // Campos não usados na listagem ignorados
+                    rs.getInt("cliente_id"), 
+                    rs.getString("nome_cliente"), 
+                    rs.getString("cpf"), 
+                    rs.getDate("data_nascimento"), 
+                    rs.getString("email"), 
+                    "", "", "" 
                 );
                 
-                // Reconstrói o objeto Objetivo
+                // objeto Objetivo
                 Objetivo obj = new Objetivo(
-                    rs.getInt("objetivo_id"), rs.getString("nome_objetivo"), 
-                    rs.getBigDecimal("valor_integralizacao"), null, null, null, 0, 0
+                    rs.getInt("objetivo_id"), 
+                    rs.getString("nome_objetivo"), 
+                    rs.getBigDecimal("valor_integralizacao"), 
+                    null, null, null, 0, 0 
                 );
                 
                 MembroGrupo mg = new MembroGrupo(
@@ -88,11 +50,12 @@ public class MembroGrupoModel {
             }
             st.close();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao buscar dados: " + ex.getMessage());
         }
         return lista;
     }
 
+    // 1. Listar todos
     public ArrayList<MembroGrupo> liste() {
         String sql = "SELECT m.membro_grupo_id, m.gestor, " +
                      "c.cliente_id, c.nome as nome_cliente, c.cpf, c.data_nascimento, c.email, " +
@@ -104,7 +67,7 @@ public class MembroGrupoModel {
         return executarBusca(sql, null);
     }
 
-    // Busca Específica por Objetivo
+    // 2. Filtrar por Objetivo (Para o combobox de filtro)
     public ArrayList<MembroGrupo> listePorObjetivo(int objetivoId) {
         String sql = "SELECT m.membro_grupo_id, m.gestor, " +
                      "c.cliente_id, c.nome as nome_cliente, c.cpf, c.data_nascimento, c.email, " +
@@ -115,5 +78,48 @@ public class MembroGrupoModel {
                      "WHERE m.objetivo_id = ? " +
                      "ORDER BY c.nome";
         return executarBusca(sql, objetivoId);
+    }
+
+    // 3. Gravar (Procedure)
+    public String grave(MembroGrupo m) {
+        try {
+            Conexao c = new Conexao();
+            c.conecte();
+            String sql = "call p_salve_membro_grupo(?, ?, ?, ?)";
+            PreparedStatement st = c.conexao.prepareStatement(sql);
+            
+            st.setInt(1, m.getMembroGrupoId());
+            st.setInt(2, m.getCliente().getClienteId());
+            st.setInt(3, m.getObjetivo().getObjetivoId());
+            st.setInt(4, m.getGestor());
+            
+            st.executeUpdate();
+            ResultSet rs = st.getResultSet();
+            rs.next();
+            String msg = rs.getString(2);
+            st.close();
+            return msg;
+        } catch (Exception ex) {
+            return "Erro ao gravar: " + ex.getMessage();
+        }
+    }
+
+    // 4. Remover (Procedure)
+    public String remova(int id) {
+        try {
+            Conexao c = new Conexao();
+            c.conecte();
+            String sql = "call p_delete_membro_grupo(?)";
+            PreparedStatement st = c.conexao.prepareStatement(sql);
+            st.setInt(1, id);
+            st.executeUpdate();
+            ResultSet rs = st.getResultSet();
+            rs.next();
+            String msg = rs.getString(2);
+            st.close();
+            return msg;
+        } catch (Exception ex) {
+            return "Erro ao remover: " + ex.getMessage();
+        }
     }
 }

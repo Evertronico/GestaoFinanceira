@@ -11,53 +11,46 @@ import model.ClienteModel;
 import model.MembroGrupoModel;
 import model.ObjetivoModel;
 
-
 public class JFMembroGrupo extends javax.swing.JFrame {
     
     private int linhaSelecionada = -1;
     private ArrayList<MembroGrupo> listaMembros = new ArrayList<>();
-    
-    // Controla se o combobox está apenas filtrando ou selecionando para cadastro
-    private boolean modoFiltro = false; 
+
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFMembroGrupo.class.getName());
 
     public JFMembroGrupo() {
         initComponents();
         carregarCombos();
-        atualizarTabela(); // Carrega todos ao iniciar
+        atualizarTabela(); 
+        controlarBotoes(); 
     }
 
     private void carregarCombos() {
         // Carrega Clientes
         ClienteModel cModel = new ClienteModel();
-        ArrayList<Cliente> clientes = cModel.liste();
-        // Cria um model para o combo aceitar Objetos
         DefaultComboBoxModel<Object> comboCli = new DefaultComboBoxModel<>();
-        for(Cliente c : clientes) {
-            comboCli.addElement(c); // O toString() do Cliente exibirá o nome
+        for(Cliente c : cModel.liste()) {
+            comboCli.addElement(c);
         }
         cbCliente.setModel(comboCli);
+        cbCliente.setSelectedIndex(-1);
 
         // Carrega Objetivos
         ObjetivoModel oModel = new ObjetivoModel();
-        ArrayList<Objetivo> objetivos = oModel.liste();
         DefaultComboBoxModel<Object> comboObj = new DefaultComboBoxModel<>();
-        for(Objetivo o : objetivos) {
+        for(Objetivo o : oModel.liste()) {
             comboObj.addElement(o);
         }
         cbObjetivo.setModel(comboObj);
+        cbObjetivo.setSelectedIndex(-1); 
     }
 
+    // Método objetivo selecionado, filtra
     private void atualizarTabela() {
         MembroGrupoModel model = new MembroGrupoModel();
-        
-        // Lógica: Se tivermos um checkbox "Filtrar" marcado, usamos o ID do combo
-        // Se não, listamos tudo. 
-        // Como seu form original não tem checkbox explicito, vou assumir que
-        // o botão BUSCAR aplica o filtro do Combobox Objetivo selecionado.
-        
-        if (modoFiltro && cbObjetivo.getSelectedItem() != null) {
-            Objetivo objSelecionado = (Objetivo) cbObjetivo.getSelectedItem();
-            listaMembros = model.listePorObjetivo(objSelecionado.getObjetivoId());
+        if (cbObjetivo.getSelectedIndex() != -1) {
+            Objetivo obj = (Objetivo) cbObjetivo.getSelectedItem();
+            listaMembros = model.listePorObjetivo(obj.getObjetivoId());
         } else {
             listaMembros = model.liste();
         }
@@ -82,30 +75,31 @@ public class JFMembroGrupo extends javax.swing.JFrame {
         linhaSelecionada = -1;
         cbCliente.setSelectedIndex(-1);
         cbObjetivo.setSelectedIndex(-1);
-        btnRemover.setEnabled(false);
-        modoFiltro = false; // Reseta o modo de busca
-        atualizarTabela(); // Volta a listar tudo
+        
+        controlarBotoes();
+        atualizarTabela();
     }
     
-    // Método auxiliar para selecionar o item correto no combo baseando-se no ID
-private void selecionarComboPorId(javax.swing.JComboBox cb, int id) {
-    for (int i = 0; i < cb.getItemCount(); i++) {
-        Object item = cb.getItemAt(i);
-        if (item instanceof controller.Cliente) {
-            if (((controller.Cliente) item).getClienteId() == id) {
-                cb.setSelectedIndex(i);
-                return;
-            }
-        } else if (item instanceof controller.Objetivo) {
-            if (((controller.Objetivo) item).getObjetivoId() == id) {
-                cb.setSelectedIndex(i);
-                return;
+    private void controlarBotoes() {
+        btnRemover.setEnabled(linhaSelecionada != -1);
+    }
+    
+    private void selecionarComboPorId(javax.swing.JComboBox cb, int id) {
+        for (int i = 0; i < cb.getItemCount(); i++) {
+            Object item = cb.getItemAt(i);
+            if (item instanceof Cliente) {
+                if (((Cliente) item).getClienteId() == id) {
+                    cb.setSelectedIndex(i);
+                    return;
+                }
+            } else if (item instanceof Objetivo) {
+                if (((Objetivo) item).getObjetivoId() == id) {
+                    cb.setSelectedIndex(i);
+                    return;
+                }
             }
         }
     }
-}
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFMembroGrupo.class.getName());
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -183,6 +177,11 @@ private void selecionarComboPorId(javax.swing.JComboBox cb, int id) {
         });
 
         cbCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbClienteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -239,7 +238,7 @@ private void selecionarComboPorId(javax.swing.JComboBox cb, int id) {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarActionPerformed
-        if (cbCliente.getSelectedItem() == null || cbObjetivo.getSelectedItem() == null) {
+        if (cbCliente.getSelectedIndex() == -1 || cbObjetivo.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(null, "Selecione um Cliente e um Objetivo.");
             return;
         }
@@ -249,14 +248,15 @@ private void selecionarComboPorId(javax.swing.JComboBox cb, int id) {
 
         int id = (linhaSelecionada == -1) ? -1 : listaMembros.get(linhaSelecionada).getMembroGrupoId();
         
-        // Por padrão gestor 0, se quiser implementar checkbox de gestor, mude aqui
         MembroGrupo membro = new MembroGrupo(id, cli, obj, 0);
-
         MembroGrupoModel model = new MembroGrupoModel();
         String msg = model.grave(membro);
+        
         JOptionPane.showMessageDialog(null, msg);
         
-        limparFormulario();
+        if (!msg.toLowerCase().contains("erro")) {
+            limparFormulario();
+        }
     }//GEN-LAST:event_btnGravarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -264,7 +264,7 @@ private void selecionarComboPorId(javax.swing.JComboBox cb, int id) {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void cbObjetivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbObjetivoActionPerformed
-        // TODO add your handling code here:
+        atualizarTabela();
     }//GEN-LAST:event_cbObjetivoActionPerformed
 
     private void tblMembroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMembroMouseClicked
@@ -272,26 +272,29 @@ private void selecionarComboPorId(javax.swing.JComboBox cb, int id) {
         if (linhaSelecionada != -1) {
             MembroGrupo m = listaMembros.get(linhaSelecionada);
             
-            // Seleciona os itens corretos nos combos
-            // Isso requer que o equals() esteja implementado ou que seja a mesma referência
-            // Como carregamos do banco, podemos iterar para achar pelo ID se não selecionar direto
             selecionarComboPorId(cbCliente, m.getCliente().getClienteId());
             selecionarComboPorId(cbObjetivo, m.getObjetivo().getObjetivoId());
             
-            btnRemover.setEnabled(true);
+            controlarBotoes();
         }
     }//GEN-LAST:event_tblMembroMouseClicked
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
         if (linhaSelecionada == -1) return;
-        
-        if (JOptionPane.showConfirmDialog(null, "Remover membro?", "Confirmação", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            MembroGrupoModel model = new MembroGrupoModel();
-            String msg = model.remova(listaMembros.get(linhaSelecionada).getMembroGrupoId());
-            JOptionPane.showMessageDialog(null, msg);
-            limparFormulario();
-        }
+
+                MembroGrupo m = listaMembros.get(linhaSelecionada);
+
+                if (JOptionPane.showConfirmDialog(null, "Remover membro do grupo?", "Confirmação", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    MembroGrupoModel model = new MembroGrupoModel();
+                    String msg = model.remova(m.getMembroGrupoId());
+                    JOptionPane.showMessageDialog(null, msg);
+                    limparFormulario();
+                }
     }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void cbClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbClienteActionPerformed
+
+    }//GEN-LAST:event_cbClienteActionPerformed
 
     /**
      * @param args the command line arguments
