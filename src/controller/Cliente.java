@@ -38,6 +38,11 @@ public class Cliente {
     public String getNome() {
         return nome;
     }
+    
+    @Override
+    public String toString() {
+        return this.nome; // Isso diz ao ComboBox para mostrar o NOME do cliente
+    }
 
     public void setNome(String nome) {
         this.nome = nome;
@@ -90,4 +95,5 @@ public class Cliente {
     public void setNumeroTelefoneFixo(String numeroTelefoneFixo) {
         this.numeroTelefoneFixo = numeroTelefoneFixo;
     }
+    
 }

@@ -36,6 +36,11 @@ public class Objetivo {
     public String getNome() {
         return nome;
     }
+    
+    @Override
+    public String toString() {
+        return this.nome; // Isso diz ao ComboBox para mostrar o NOME do cliente
+    }
 
     public void setNome(String nome) {
         this.nome = nome;
