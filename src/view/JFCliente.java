@@ -247,9 +247,9 @@ public class JFCliente extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -337,7 +337,7 @@ public class JFCliente extends javax.swing.JFrame {
                     java.util.Date parsed = sdf.parse(txtDataNascimento.getText().trim());
                     dataRealizacao = new java.sql.Date(parsed.getTime());
                 } catch (ParseException ex) {
-                    JOptionPane.showMessageDialog(null, "Data de Nascimento inválida. Use o formato DD/MM/AAAA.");
+                    JOptionPane.showMessageDialog(null, "data de nascimento inválida. Use o formato DD/MM/AAAA.");
                     return;
                 }
             } else {
@@ -379,7 +379,7 @@ public class JFCliente extends javax.swing.JFrame {
         }
 
         if (JOptionPane.showConfirmDialog(
-                null, "Deseja realmente remover o cliente " + clientes.get(linhaSelecionada).getNome() + "?", 
+                null, "Deseja realmente remover o(a) cliente " + clientes.get(linhaSelecionada).getNome() + "?", 
                 "Confirmação", JOptionPane.YES_NO_OPTION
             ) == JOptionPane.YES_OPTION) {
             
@@ -394,7 +394,7 @@ public class JFCliente extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         if (txtNome.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Informe um termo de busca no campo Nome.");
+            JOptionPane.showMessageDialog(null, "Informe um termo de busca no campo nome.");
             return;
         }
 
@@ -408,11 +408,7 @@ public class JFCliente extends javax.swing.JFrame {
         atualizarTabela();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -435,7 +431,6 @@ public class JFCliente extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new JFCliente().setVisible(true);
