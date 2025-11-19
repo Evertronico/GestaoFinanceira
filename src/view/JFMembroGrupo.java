@@ -1,8 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package view;
+
+import model.MembroObjetivoModel;
+import controller.MembroObjetivo;
+import controller.Objetivo;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import model.ClienteModel;
+import model.ObjetivoModel;
+import controller.Cliente;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -10,11 +17,12 @@ package view;
  */
 public class JFMembroGrupo extends javax.swing.JFrame {
 
-    /**
-     * Creates new form JFMembroGrupo
-     */
+    private int linhaSelecionada;
+    private ArrayList<MembroObjetivo> mo = new ArrayList<>();
     public JFMembroGrupo() {
         initComponents();
+        this.preencherBox();
+        this.atualizarTabela();
     }
 
     /**
@@ -26,21 +34,234 @@ public class JFMembroGrupo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        btnGravar = new javax.swing.JButton();
+        btnRemover = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TabelaMembro = new javax.swing.JTable();
+        objetivoBox = new javax.swing.JComboBox<>();
+        clienteBox = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        btnGravar.setText("btnGravar");
+        btnGravar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGravarActionPerformed(evt);
+            }
+        });
+
+        btnRemover.setText("btnRemover");
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverActionPerformed(evt);
+            }
+        });
+
+        btnCancelar.setText("btnCancelar");
+
+        TabelaMembro.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Codigo", "Objetivo", "Cliente"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        TabelaMembro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TabelaMembroMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(TabelaMembro);
+        if (TabelaMembro.getColumnModel().getColumnCount() > 0) {
+            TabelaMembro.getColumnModel().getColumn(0).setHeaderValue("Codigo");
+            TabelaMembro.getColumnModel().getColumn(1).setHeaderValue("Objetivo");
+            TabelaMembro.getColumnModel().getColumn(2).setHeaderValue("Cliente");
+        }
+
+        objetivoBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                objetivoBoxActionPerformed(evt);
+            }
+        });
+
+        clienteBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clienteBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Objetivo");
+
+        jLabel3.setText("Pessoas");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnGravar)
+                        .addGap(45, 45, 45)
+                        .addComponent(btnRemover)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCancelar)
+                        .addGap(45, 45, 45))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(objetivoBox, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(34, Short.MAX_VALUE))))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addContainerGap(226, Short.MAX_VALUE)
+                    .addComponent(clienteBox, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(11, 11, 11)))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel3))
+                .addGap(7, 7, 7)
+                .addComponent(objetivoBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(64, 64, 64)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnGravar)
+                    .addComponent(btnRemover)
+                    .addComponent(btnCancelar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(24, 24, 24)
+                    .addComponent(clienteBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(435, Short.MAX_VALUE)))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarActionPerformed
+        ClienteModel cm = new ClienteModel();
+        ObjetivoModel obj = new ObjetivoModel();
+
+        ArrayList<Cliente> cliente = cm.pesquise(String.valueOf(clienteBox.getSelectedItem()));
+        ArrayList<Objetivo> objv = obj.pesquise(String.valueOf(objetivoBox.getSelectedItem()));
+
+        int clienteId = cliente.get(0).getClienteId();
+        int objetivoId = objv.get(0).getObjetivoId();
+        MembroObjetivoModel mom = new MembroObjetivoModel();;
+        mom.grave(clienteId, objetivoId);
+        atualizarTabela();
+    }//GEN-LAST:event_btnGravarActionPerformed
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        if (linhaSelecionada == -1) {
+            JOptionPane.showMessageDialog(null, "Nenhum objetivo selecionado.");
+            return;
+        }
+
+        if (JOptionPane.showConfirmDialog(
+                null, "Deseja realmente remover?", "Confirmação", JOptionPane.YES_NO_OPTION
+            ) == JOptionPane.YES_OPTION) {
+            // cria um objeto da classe model
+            MembroObjetivoModel model = new MembroObjetivoModel();
+            // chama o método de remoção de registro no banco de dados
+            model.remova(mo.get(linhaSelecionada).getMembroGrupoId());
+            // exibe a mensagem retornada pelo banco de dados 
+            atualizarTabela();
+        }
+    }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void clienteBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clienteBoxActionPerformed
+
+    }//GEN-LAST:event_clienteBoxActionPerformed
+
+    private void objetivoBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_objetivoBoxActionPerformed
+
+    }//GEN-LAST:event_objetivoBoxActionPerformed
+    
+    private void atualizarTabela() {
+        // cria objeto da classe model e lista a coleção de objetos
+        MembroObjetivoModel model = new MembroObjetivoModel();
+        mo = model.liste();
+        // carrega a tabela (JTable)
+        carregarTabela(mo);
+    }
+    
+    private void carregarTabela(ArrayList<MembroObjetivo> lista) {
+        // captura a estrutura da tabela (JTable)
+        DefaultTableModel table = (DefaultTableModel) TabelaMembro.getModel();
+        // limpa todas as linhas da tabela
+        
+        table.setRowCount(0);
+        // percorre a coleção de objetos incluindo linha por linha na tabela
+        for (MembroObjetivo mo : lista) {
+            // adiciona uma nova linha na tabela
+            table.addRow(new Object[]{
+                mo.getMembroGrupoId(), mo.getObjetivoId(), mo.getClienteId()
+            });
+        }
+    }
+    
+    private void TabelaMembroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabelaMembroMouseClicked
+        this.linhaSelecionada = TabelaMembro.getSelectedRow();
+        MembroObjetivoModel mom = new MembroObjetivoModel();
+        ArrayList<MembroObjetivo> moms = mom.liste();
+        controlarBotoes();
+    }//GEN-LAST:event_TabelaMembroMouseClicked
+    
+    private void preencherBox() {
+        ObjetivoModel mom = new ObjetivoModel();
+        for (Objetivo o : mom.liste()) {
+            objetivoBox.addItem(o.getNome());
+        }
+
+        ClienteModel cm = new ClienteModel();
+        for (Cliente c : cm.liste()) {
+            clienteBox.addItem(c.getNome());
+        }
+    }
+
+    private void controlarBotoes() {
+        btnRemover.setEnabled(this.linhaSelecionada != -1);
+    }
 
     /**
      * @param args the command line arguments
@@ -78,5 +299,15 @@ public class JFMembroGrupo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable TabelaMembro;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnGravar;
+    private javax.swing.JButton btnRemover;
+    private javax.swing.JComboBox<String> clienteBox;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JComboBox<String> objetivoBox;
     // End of variables declaration//GEN-END:variables
 }
