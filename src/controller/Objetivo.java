@@ -1,7 +1,6 @@
 package controller;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 
 public class Objetivo {
 
@@ -14,7 +13,10 @@ public class Objetivo {
     private int numeroParcelas;
     private int cotas;
 
-    public Objetivo(int objetivoId, String nome, BigDecimal valorIntegralizacao, Date dataRealizacao, BigDecimal jurosAtrasoDiario, BigDecimal multaAtraso, int numeroParcelas, int cotas) {
+    public Objetivo(){}
+
+    public Objetivo(int objetivoId, String nome, BigDecimal valorIntegralizacao, java.sql.Date dataRealizacao,
+            BigDecimal jurosAtrasoDiario, BigDecimal multaAtraso, int numeroParcelas, int cotas) {
         this.objetivoId = objetivoId;
         this.nome = nome;
         this.valorIntegralizacao = valorIntegralizacao;
@@ -25,6 +27,7 @@ public class Objetivo {
         this.cotas = cotas;
     }
 
+    // Getters e Setters
     public int getObjetivoId() {
         return objetivoId;
     }
@@ -49,11 +52,11 @@ public class Objetivo {
         this.valorIntegralizacao = valorIntegralizacao;
     }
 
-    public Date getDataRealizacao() {
+    public java.sql.Date getDataRealizacao() {
         return dataRealizacao;
     }
 
-    public void setDataRealizacao(Date dataRealizacao) {
+    public void setDataRealizacao(java.sql.Date dataRealizacao) {
         this.dataRealizacao = dataRealizacao;
     }
 
@@ -89,4 +92,8 @@ public class Objetivo {
         this.cotas = cotas;
     }
 
+    @Override
+    public String toString() {
+        return nome;
+    }
 }

@@ -13,6 +13,9 @@ public class Cliente {
     private String celular;
     private String telefoneFixo;
 
+    // método construtor
+    public Cliente() {}
+
     public Cliente(int clienteId, String nome, String cpf, Date dataNascimento, String email, String senha, String celular, String telefoneFixo) {
         this.clienteId = clienteId;
         this.nome = nome;
@@ -86,5 +89,11 @@ public class Cliente {
 
     public void setTelefoneFixo(String telefoneFixo) {
         this.telefoneFixo = telefoneFixo;
+    }
+
+    // método toString
+    @Override
+    public String toString() {
+        return nome;
     }
 }
