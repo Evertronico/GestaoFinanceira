@@ -21,7 +21,7 @@ public class MembroGrupoModel {
             c.conecte();
             Statement st = c.conexao.createStatement();
 
-            String sql = "";
+            String sql = "select * from v_membro_grupo";
 
             ResultSet rs = st.executeQuery(sql);
 
