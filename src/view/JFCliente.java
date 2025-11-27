@@ -300,7 +300,7 @@ public class JFCliente extends javax.swing.JFrame {
             ClienteModel model = new ClienteModel();  
             //remove o objetivo e recupera a mensagem do banco de dados
             String msg = model.remova(
-                    this.clientes.get(this.linhaSelecionada).getClinteId()
+                    this.clientes.get(this.linhaSelecionada).getClienteId()
             );
             limparFormulario();
             atualizarTabela();
@@ -366,7 +366,7 @@ public class JFCliente extends javax.swing.JFrame {
             Cliente c = new Cliente(
                 this.linhaSelecionada == -1 
                     ? -1 
-                    : this. clientes.get(this.linhaSelecionada).getClinteId(),
+                    : this. clientes.get(this.linhaSelecionada).getClienteId(),
             nome,
             cpf,
             dataNascimento,
