@@ -73,6 +73,7 @@ public class JFMembroGrupo extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMembroGrupo = new javax.swing.JTable();
+        btnBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gestão de Membros");
@@ -90,8 +91,18 @@ public class JFMembroGrupo extends javax.swing.JFrame {
 
         btnRemover.setText("Remover");
         btnRemover.setEnabled(false);
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         tblMembroGrupo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -110,6 +121,13 @@ public class JFMembroGrupo extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tblMembroGrupo);
+
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,7 +152,9 @@ public class JFMembroGrupo extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnRemover)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnCancelar)))
+                                .addComponent(btnCancelar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnBuscar)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -153,7 +173,8 @@ public class JFMembroGrupo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGravar)
                     .addComponent(btnRemover)
-                    .addComponent(btnCancelar))
+                    .addComponent(btnCancelar)
+                    .addComponent(btnBuscar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
                 .addContainerGap())
@@ -191,16 +212,69 @@ public class JFMembroGrupo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnGravarActionPerformed
 
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+
+        if (this.linha == -1) {
+            JOptionPane.showMessageDialog(null, "Nenhum membro do grupo selecionado");
+            return;
+        }
+
+        // valida a ação de exclusão
+        if (JOptionPane.showConfirmDialog(null, "Realmente deseja remover?", 
+            "Confirmação", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            // cria objeto
+            MembroGrupoModel model = new MembroGrupoModel();
+            // remove o membro do grupo e recupera a mensagem do banco de dados
+            String msg = model.Remova(
+                this.listaMembros.get(this.linha).getMembroGrupoId()
+            );
+            this.refreshUI(msg);
+        }
+              
+    }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+
+        if (jcbObjetivo.getSelectedItem().toString().isEmpty()) {
+            // exibe uma mensagem ao usuário
+            JOptionPane.showMessageDialog(null, "Informe um termo de busca.");
+            // realiza o reset do formulário
+            btnCancelarActionPerformed(evt);
+            return;
+        }
+
+        // cria um objeto da classe model
+        MembroGrupoModel model = new MembroGrupoModel();
+        this.listaMembros = model.pesquise(jcbObjetivo.getSelectedItem().toString());
+        carregarTabela(this.listaMembros);
+       
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        this.limpeFormulario();
+        this.atualizeTabela();
+        this.controleBotoes();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
     private void refreshUI(String msg) {
         atualizeTabela();
-        //limpeFormulario();
-        //controleBotoes();
+        limpeFormulario();
+        controleBotoes();
     }
 
     private void atualizeTabela() {
         MembroGrupoModel model = new MembroGrupoModel();
         listaMembros = model.liste();
         carregarTabela(listaMembros);
+    }
+    
+    private void controleBotoes() {
+        btnRemover.setEnabled(this.linha != -1);
+    }
+    
+    private void limpeFormulario() {
+        this.linha = -1;
+        jcbObjetivo.setSelectedItem("");
     }
 
     private void carregarTabela(ArrayList<MembroGrupo> lista) {
@@ -248,6 +322,7 @@ public class JFMembroGrupo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGravar;
     private javax.swing.JButton btnRemover;
