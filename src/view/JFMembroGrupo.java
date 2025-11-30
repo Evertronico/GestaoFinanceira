@@ -3,11 +3,16 @@ package view;
 import controller.Cliente;
 import controller.MembroGrupo;
 import controller.Objetivo;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.ClienteModel;
+import model.Conexao;
 import model.MembroGrupoModel;
 import model.ObjetivoModel;
 
@@ -30,6 +35,9 @@ public class JFMembroGrupo extends javax.swing.JFrame {
         // carrega os registros (cliente, objetivo) para os JComboBox
         carregarCombos();
         atualizeTabela();
+    }
+    private void limparFormulario() {
+       
     }
 
     private void carregarCombos() {
@@ -90,6 +98,11 @@ public class JFMembroGrupo extends javax.swing.JFrame {
 
         btnRemover.setText("Remover");
         btnRemover.setEnabled(false);
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
 
@@ -107,6 +120,11 @@ public class JFMembroGrupo extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblMembroGrupo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblMembroGrupoMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblMembroGrupo);
@@ -173,7 +191,12 @@ public class JFMembroGrupo extends javax.swing.JFrame {
             // recupera membro e objetivo na prática
             Cliente clienteSelecionado = (Cliente) jcbMembro.getSelectedItem();
             Objetivo objetivoSelecionado = (Objetivo) jcbObjetivo.getSelectedItem();
-
+            
+             int membroGrupoId = -1;
+            if (linha != -1 && linha < listaMembros.size()) {
+                membroGrupoId = listaMembros.get(linha).getMembroGrupoId();
+            }
+            
             // objeto da classe MembroGrupo
             MembroGrupo membro = new MembroGrupo(
                 this.linha == -1 ? -1 : listaMembros.get(this.linha).getMembroGrupoId(),
@@ -191,8 +214,73 @@ public class JFMembroGrupo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnGravarActionPerformed
 
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        controlarBotoes();
+        if (linha == -1) {
+            JOptionPane.showMessageDialog(null, "Selecione um Membro.");
+            return;
+        }
+        if (JOptionPane.showConfirmDialog(null, "Remover membro?", "Confirmação", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            MembroGrupoModel model = new MembroGrupoModel();
+            String msg = model.remova(listaMembros.get(linha).getMembroGrupoId());
+            JOptionPane.showMessageDialog(null, msg);
+            
+            linha = -1;
+            tblMembroGrupo.clearSelection();
+            
+            atualizeTabela();
+            controlarBotoes();
+            
+            
+        }
+        
+    }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void tblMembroGrupoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMembroGrupoMouseClicked
+        linha = tblMembroGrupo.getSelectedRow();
+        
+        if (linha == -1) {
+            return;
+        }
+        
+        MembroGrupo membroSelecionado = listaMembros.get(linha);
+        Cliente clienteSelecionado = membroSelecionado.getCliente();
+        Objetivo objetivoSelecionado = membroSelecionado.getObjetivo();
+        
+        // Encontra e seleciona o cliente no JComboBox comparando os IDs
+        for (int i = 0; i < jcbMembro.getItemCount(); i++) {
+            Object item = jcbMembro.getItemAt(i);
+            if (item instanceof Cliente) {
+                Cliente cliente = (Cliente) item;
+                if (cliente.getClienteId() == clienteSelecionado.getClienteId()) {
+                    jcbMembro.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+        
+        // Encontra e seleciona o objetivo no JComboBox comparando os IDs
+        for (int i = 0; i < jcbObjetivo.getItemCount(); i++) {
+            Object item = jcbObjetivo.getItemAt(i);
+            if (item instanceof Objetivo) {
+                Objetivo objetivo = (Objetivo) item;
+                if (objetivo.getObjetivoId() == objetivoSelecionado.getObjetivoId()) {
+                    jcbObjetivo.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+        
+        controlarBotoes();
+        
+    }//GEN-LAST:event_tblMembroGrupoMouseClicked
+
     private void refreshUI(String msg) {
         atualizeTabela();
+        linha = -1;
+        tblMembroGrupo.clearSelection();
+        
+        controlarBotoes();
         //limpeFormulario();
         //controleBotoes();
     }
@@ -202,6 +290,7 @@ public class JFMembroGrupo extends javax.swing.JFrame {
         listaMembros = model.liste();
         carregarTabela(listaMembros);
     }
+  
 
     private void carregarTabela(ArrayList<MembroGrupo> lista) {
         DefaultTableModel table = (DefaultTableModel) tblMembroGrupo.getModel();
@@ -213,6 +302,10 @@ public class JFMembroGrupo extends javax.swing.JFrame {
                 m.getObjetivo().getNome()
             });
         }
+    }
+    
+    private void controlarBotoes() {
+        btnRemover.setEnabled(linha != -1);
     }
 
     public static void main(String args[]) {

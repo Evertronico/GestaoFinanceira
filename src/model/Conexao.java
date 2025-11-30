@@ -12,7 +12,7 @@ public class Conexao {
     // método explícito para efetuar uma conexão com o banco de dados
     public void conecte() throws ClassNotFoundException, SQLException {
         // string de conexão com o banco de dados
-        String url = "jdbc:mysql://localhost:3306/gestao_financeira?autoReconnect=true&useSSL=false";
+        String url = "jdbc:mysql://localhost:3307/gestao_financeira?autoReconnect=true&useSSL=false";
 
         // define usuário e senha de comunicação com o banco de dados
         String usuario = "root";

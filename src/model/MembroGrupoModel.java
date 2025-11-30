@@ -78,4 +78,24 @@ public class MembroGrupoModel {
 
         return msg;
     }
+    
+      public String remova(int membroGrupoId) {
+        String msg = "";
+        try {
+            Conexao c = new Conexao();
+            c.conecte();
+            PreparedStatement st = c.conexao.prepareStatement("call p_delete_membro_grupo(?)");
+            st.setInt(1, membroGrupoId);
+            st.execute();
+            ResultSet rs = st.getResultSet();
+            if (rs.next()) msg = rs.getString(2);
+            st.close();
+        } catch (ClassNotFoundException | SQLException ex) {
+            msg = ex.getMessage();
+            JOptionPane.showMessageDialog(null, msg);
+        }
+        return msg;
+    }
+    
+    
 }
